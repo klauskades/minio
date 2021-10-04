@@ -492,6 +492,8 @@ func LookupConfig(kvs config.KVS, transport *http.Transport, closeRespFn func(io
 		jwksURL = env.Get(EnvIdentityOpenIDJWKSURL, kvs.Get(JwksURL))
 	}
 
+	fmt.Println(jwksURL)
+
 	c = Config{
 		RWMutex:       &sync.RWMutex{},
 		ClaimName:     env.Get(EnvIdentityOpenIDClaimName, kvs.Get(ClaimName)),
@@ -507,10 +509,12 @@ func LookupConfig(kvs config.KVS, transport *http.Transport, closeRespFn func(io
 
 	configURL := env.Get(EnvIdentityOpenIDURL, kvs.Get(ConfigURL))
 	if configURL != "" {
+		fmt.Println(configURL)
 		c.URL, err = xnet.ParseHTTPURL(configURL)
 		if err != nil {
 			return c, err
 		}
+		fmt.Println(c.URL)
 		c.DiscoveryDoc, err = parseDiscoveryDoc(c.URL, transport, closeRespFn)
 		if err != nil {
 			return c, err
